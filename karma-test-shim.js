@@ -26,7 +26,8 @@ function createPathRecords(pathsMapping, appPath) {
     // creates local module name mapping to global path with karma's fingerprint in path, e.g.:
     // './vg-player/vg-player':
     // '/base/dist/vg-player/vg-player.js?f4523daf879cfb7310ef6242682ccf10b2041b3e'
-    var moduleName = './' + resolveKeyPathForMapping('base/dist/', appPath);
+    var pathParts = appPath.split('/');
+    var moduleName = './' + pathParts.slice(Math.max(pathParts.length - 2, 1)).join('/');
     moduleName = moduleName.replace(/\.js$/, '');
     pathsMapping[moduleName] = appPath + '?' + window.__karma__.files[appPath];
     return pathsMapping;
@@ -48,13 +49,4 @@ function resolveTestFiles() {
             // 'base/dist/vg-player/vg-player.spec')
             return System.import(moduleName);
         });
-}
-
-function resolveKeyPathForMapping(basePathWhereToStart, appPath) {
-    var location = appPath.indexOf(basePathWhereToStart);
-    if (location > -1) {
-        return appPath.substring(basePathWhereToStart.length + 1);
-    } else {
-        return appPath;
-    }
 }
